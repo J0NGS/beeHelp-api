@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/draeWiki/api/profiles")
+@RequestMapping("/beeHelp/api/profiles")
 @RequiredArgsConstructor
 public class ProfileController {
     private final UpdateProfileNameUseCase updateProfileNameUseCase;

@@ -1,21 +1,24 @@
 package br.com.starter.domain.profile;
 
 import br.com.starter.domain.address.Address;
+import br.com.starter.domain.common.Auditable;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.envers.Audited;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
+@Audited
 @Table(name = "profiles")
 @Getter
 @Setter
-public class Profile {
+public class Profile extends Auditable {
     @Id
     private UUID id = UUID.randomUUID();
 
@@ -30,6 +33,6 @@ public class Profile {
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @Version
+    private Long version;
 }

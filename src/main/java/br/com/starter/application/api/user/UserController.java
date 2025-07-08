@@ -1,16 +1,12 @@
 package br.com.starter.application.api.user;
 
 import br.com.starter.application.api.common.ResponseDTO;
-import br.com.starter.application.api.user.dto.AuthRequestDTO;
 import br.com.starter.application.api.user.dto.UpdateUserDTO;
-import br.com.starter.application.api.user.dto.UserRegistrationRequest;
 import br.com.starter.application.useCase.user.AddPrivilegesToUserUseCase;
 import br.com.starter.application.useCase.user.ChangeUserRoleUseCase;
-import br.com.starter.application.useCase.user.CreateUserUseCase;
 import br.com.starter.application.useCase.user.UpdateUserUseCase;
 import br.com.starter.application.useCase.user.UpdateUsernameUseCase;
 import br.com.starter.application.useCase.user.DeleteUserUseCase;
-import br.com.starter.application.useCase.user.GetUserByIdUserCase;
 import br.com.starter.application.useCase.user.RemovePrivilegesToUserUseCase;
 import br.com.starter.application.useCase.user.UpdatePasswordUseCase;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +18,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,10 +27,9 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.starter.domain.user.CustomUserDetails;
 
 @RestController
-@RequestMapping("/draeWiki/api/users")
+@RequestMapping("/beeHelp/api/users")
 @RequiredArgsConstructor
 public class UserController {
-    private final CreateUserUseCase createUserUseCase;
     private final UpdateUserUseCase updateUserUseCase;
     private final DeleteUserUseCase deleteUserUseCase;
     private final UpdateUsernameUseCase updateUsernameUseCase;
@@ -43,12 +37,6 @@ public class UserController {
     private final AddPrivilegesToUserUseCase addPrivilegesToUserUseCase;
     private final RemovePrivilegesToUserUseCase removePrivilegesToUserUseCase;
     private final ChangeUserRoleUseCase changeUserRoleUseCase;
-
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody UserRegistrationRequest user) {
-        ResponseDTO<?> response = new ResponseDTO<>(createUserUseCase.execute(user));
-        return ResponseEntity.ok(response);
-    }
 
     @PutMapping("/{userId}")
     public ResponseEntity<?> update(@AuthenticationPrincipal CustomUserDetails userAuthentication,

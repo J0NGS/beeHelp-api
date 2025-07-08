@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/draeWiki/api/privileges")
+@RequestMapping("/beeHelp/api/privileges")
 @RequiredArgsConstructor
 public class PrivilegeController {
 

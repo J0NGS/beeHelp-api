@@ -1,21 +1,24 @@
 package br.com.starter.domain.role;
 
+import br.com.starter.domain.common.Auditable;
 import br.com.starter.domain.privilege.Privilege;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.envers.Audited;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
+@Audited
 @Table(name = "roles")
 @Setter
 @Getter
-public class Role {
+public class Role extends Auditable {
     @Id
     private UUID id = UUID.randomUUID();
 
@@ -31,6 +34,6 @@ public class Role {
     )
     private List<Privilege> privileges;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @Version
+    private Long version;
 }

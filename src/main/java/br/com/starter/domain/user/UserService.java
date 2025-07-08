@@ -18,6 +18,7 @@ import br.com.starter.infrastructure.services.utils.StringSanitizer;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -74,30 +75,15 @@ public class UserService {
     }
 
     @Transactional
-    public User create(UserRegistrationRequest user) {
+    public User create(UserStatus status, Role role, Profile profile, Auth auth) {
         User newUser = new User();
-
-        if(user.getStatus() != null)
-            newUser.setStatus(user.getStatus());
-
-        Profile profile = new Profile();
-        profile.setName(user.getName());
-        profile.setPhone(user.getPhone());
-        profile.setBirthDate(user.getBirthDate());
+        newUser.setStatus(status);
         newUser.setProfile(profile);
-
-        Auth authRequest = new Auth();
-        authRequest.setUsername(StringSanitizer.sanitizeString(user.getUsername()));
-        authRequest.setPassword(user.getPassword());
-        newUser.setAuth(authRequest);
-
-        Role role = roleRepository.findByName(user.getRole().toString())
-                .orElseThrow(() -> new FrontDisplayableException(HttpStatus.NOT_FOUND, "Role não encontrada!"));
+        newUser.setAuth(auth);
         newUser.setRole(role);
-
         return save(newUser);
     }
-
+    
     public User getUserById (UUID userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new FrontDisplayableException(
@@ -176,8 +162,13 @@ public class UserService {
             throw new FrontDisplayableException(HttpStatus.NOT_FOUND, "Usuário não encontrado!");
         }
 
-        userRepository.deleteById(userId);
-        return true;
+        Optional<User> userOpt = userRepository.findById(userId);
+        if (userOpt.isPresent()) {
+            userOpt.get().setStatus(UserStatus.INACTIVE);
+            userOpt.get().setDeletedAt(LocalDateTime.now());
+            return true;
+        }
+        return false;
     }
 
     public User update (

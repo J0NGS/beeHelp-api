@@ -1,17 +1,24 @@
 package br.com.starter.application.api.user.dto;
 
-import br.com.starter.domain.role.RoleType;
 import br.com.starter.domain.user.UserStatus;
 import lombok.Data;
 import java.time.LocalDate;
 
-@Data
-public class UserRegistrationRequest {
-    private String username;
-    private String password;
-    private String name;
-    private String phone;
-    private LocalDate birthDate = null;
-    private UserStatus status = null;
-    private String role;
+public record UserRegistrationRequest(
+        String username,
+        String password,
+        String name,
+        String gender,
+        String phone,
+        String document,
+        LocalDate birthDate,
+        UserStatus status,
+        String role) {
+
+    public UserRegistrationRequest withRole(String role) {
+        return new UserRegistrationRequest(
+                this.username(), this.password(), this.name(),
+                this.gender(), this.phone(), this.document(),
+                this.birthDate(), this.status(), role);
+    }
 }

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/draeWiki/api/roles") 
+@RequestMapping("/beeHelp/api/roles") 
 @RequiredArgsConstructor
 public class RoleController {
     private final AddPrivilegeInRoleUseCase addPrivilegeInRoleUseCase;

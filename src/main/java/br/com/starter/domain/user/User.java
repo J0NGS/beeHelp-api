@@ -1,6 +1,7 @@
 package br.com.starter.domain.user;
 
 import br.com.starter.domain.auth.Auth;
+import br.com.starter.domain.common.Auditable;
 import br.com.starter.domain.privilege.Privilege;
 import br.com.starter.domain.profile.Profile;
 import br.com.starter.domain.role.Role;
@@ -14,11 +15,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import org.hibernate.envers.Audited;
+
 @Entity
+@Audited
 @Table(name = "users")
 @Getter
 @Setter
-public class User {
+public class User extends Auditable {
     @Id
     private UUID id = UUID.randomUUID();
 
@@ -46,6 +50,6 @@ public class User {
     )
     private List<Privilege> privileges;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @Version
+    private Long version;
 }

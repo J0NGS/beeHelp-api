@@ -5,7 +5,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import br.com.starter.domain.user.UserStatus;
+import br.com.starter.infrastructure.exceptions.FrontDisplayableException;
+
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -32,8 +37,15 @@ public class ProfileService {
 
     public void deleteById(UUID id) {
         if (!profileRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Perfil não encontrado");
+            throw new FrontDisplayableException(HttpStatus.NOT_FOUND, "Perfil não encontrado");
         }
-        profileRepository.deleteById(id);
+
+        Optional<Profile> profileOpt = profileRepository.findById(id);
+        if (profileOpt.isPresent()) {
+            profileRepository.deleteById(id);
+            profileOpt.get().setDeletedAt(LocalDateTime.now());
+        }
+        throw new FrontDisplayableException(
+                HttpStatus.NOT_MODIFIED, "Não foi possível deletar o perfil.");
     }
 }

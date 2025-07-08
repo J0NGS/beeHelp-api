@@ -1,5 +1,6 @@
 package br.com.starter.infrastructure.jwt;
 
+import java.security.Key;
 import java.util.Date;
 import java.util.Map;
 
@@ -11,8 +12,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import br.com.starter.domain.user.CustomUserDetails;
 import br.com.starter.domain.user.UserStatus;
+import br.com.starter.infrastructure.exceptions.FrontDisplayableException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtGenerator {
@@ -32,15 +35,18 @@ public class JwtGenerator {
                 .toArray(String[]::new);
         
         if (user.getStatus().equals(UserStatus.INACTIVE)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Usuário inativo");
+            throw new FrontDisplayableException(HttpStatus.FORBIDDEN, "Usuário inativo");
         }
+
+        Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+
         return Jwts.builder()
                 .setSubject(user.getAuth().getUsername())
                 .addClaims(
                     Map.of(
-                        "UUID", user.getId(),
-                        "AUTHORITIES", privileges,
-                        "ROLE", user.getRole().getName(),
+                        "profileId", user.getProfile().getId(),
+                        "authorities", privileges,
+                        "role", user.getRole().getName(),
                         "name", user.getProfile() == null
                                 ? "Usuário Indefinido"
                                 : user.getProfile().getName()
@@ -48,7 +54,7 @@ public class JwtGenerator {
                 )
                 .setIssuedAt(new Date(System.currentTimeMillis())) // Data de emissão
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME)) // Expira em 10 horas
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .signWith(key)
                 .compact();
     }
 }

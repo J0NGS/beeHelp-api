@@ -13,7 +13,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
     @Configuration
     public class SecurityFilter {
         // Rotas padrão
-        public static final String BASE_URL = "/draeWiki/api";
+        public static final String BASE_URL = "/beeHelp/api";
 
         private final JwtAuthenticationFilter jwtAuthenticationFilter;
 

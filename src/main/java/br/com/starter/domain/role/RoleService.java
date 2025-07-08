@@ -5,7 +5,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import br.com.starter.domain.privilege.Privilege;
 import br.com.starter.domain.privilege.PrivilegeService;
@@ -142,5 +141,10 @@ public class RoleService {
         }
         roleRepository.deleteById(roleId);
         return true;
+    }
+
+    public Role getRoleByName(String name) {
+        return roleRepository.findByName(name)
+                .orElseThrow(() -> new FrontDisplayableException(HttpStatus.NOT_FOUND, "Role não encontrada!"));
     }
 }
