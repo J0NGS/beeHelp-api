@@ -21,9 +21,13 @@ beeHelp-api/
 │   │   │   │   ├── role/            # Entidade Role, RoleService, RoleRepository
 │   │   │   │   ├── privilege/       # Entidade Privilege, PrivilegeService
 │   │   │   │   ├── profile/         # Entidade Profile, ProfileService
-│   │   │   │   └── address/         # Entidade Address, AddressService
+│   │   │   │   ├── address/         # Entidade Address, AddressService
+│   │   │   │   └── common/          # Entidades comuns (ex: AuditableEntity)
 │   │   │   └── infrastructure/
 │   │   │       ├── config/          # Configurações de security, CORS, hierarquia de papéis
+│   │   │       │   ├── security/        # Configurações de segurança (JWT, CORS)
+│   │   │       │   └── boot/            # Arquivos de inicialização
+│   │   │       ├── exceptions/      # exceções personalizadas
 │   │   │       ├── jwt/             # Geração e validação de JWT
 │   │   │       └── services/utils/  # Utils: sanitização, validação de documentos
 │   │   └── resources/
@@ -55,7 +59,7 @@ beeHelp-api/
 - **Jackson (data/hora - jsr310)**
 - **Lombok**
 - **Docker + Docker Compose**
-
+- **Hibernate Envers** (auditoria de entidades)
 ---
 
 ## 🚀 Como Executar com Docker Compose
@@ -77,7 +81,7 @@ beeHelp-api/
 
 3. Acesse a aplicação:
    ```
-   http://localhost:8080/draeWiki/api/
+   http://localhost:8080/beeHelp/api/
    ```
 
 > A aplicação será executada com o perfil `dev` por padrão e usará as variáveis de ambiente definidas no `docker-compose.yml`.
@@ -87,32 +91,32 @@ beeHelp-api/
 ## 🔗 Endpoints Principais
 
 ### Autenticação (público)
-- `POST /draeWiki/api/public/users/login`  
+- `POST /beeHelp/api/public/users/login`  
 
 ### Usuários (admin)
-- `POST   /draeWiki/api/users/register`  
-- `PUT    /draeWiki/api/users/{id}`  
-- `PATCH  /draeWiki/api/users/{id}/update-password?newPassword=...`  
-- `PATCH  /draeWiki/api/users/{id}/update-username?newUsername=...`  
-- `PATCH  /draeWiki/api/users/{id}/privileges/{privilegeId}/add`  
-- `PATCH  /draeWiki/api/users/{id}/privileges/{privilegeId}/remove`  
-- `PATCH  /draeWiki/api/users/{id}/update-role/{roleId}`  
-- `DELETE /draeWiki/api/users/{id}`  
+- `POST   /beeHelp/api/public/users/register`(público)
+- `PUT    /beeHelp/api/users/{id}`  
+- `PATCH  /beeHelp/api/users/{id}/update-password?newPassword=...`  
+- `PATCH  /beeHelp/api/users/{id}/update-username?newUsername=...`  
+- `PATCH  /beeHelp/api/users/{id}/privileges/{privilegeId}/add`  
+- `PATCH  /beeHelp/api/users/{id}/privileges/{privilegeId}/remove`  
+- `PATCH  /beeHelp/api/users/{id}/update-role/{roleId}`  
+- `DELETE /beeHelp/api/users/{id}`  
 
 ### Perfis
-- `PATCH /draeWiki/api/profiles/{id}/update-name?newName=...`  
-- `PATCH /draeWiki/api/profiles/update-name?newName=...`  
+- `PATCH /beeHelp/api/profiles/{id}/update-name?newName=...`  
+- `PATCH /beeHelp/api/profiles/update-name?newName=...`  
 
 ### Funções (roles)
-- `GET    /draeWiki/api/roles/{id}/privileges`  
-- `POST   /draeWiki/api/roles/{id}/privileges`  
-- `DELETE /draeWiki/api/roles/{id}/privileges`  
+- `GET    /beeHelp/api/roles/{id}/privileges`  
+- `POST   /beeHelp/api/roles/{id}/privileges`  
+- `DELETE /beeHelp/api/roles/{id}/privileges`  
 
 ### Privilégios
-- `POST   /draeWiki/api/privileges?name=...`  
-- `GET    /draeWiki/api/privileges`  
-- `PATCH  /draeWiki/api/privileges/{id}/signature-revoked?isSignatureRevoked=...`  
-- `DELETE /draeWiki/api/privileges/{id}`  
+- `POST   /beeHelp/api/privileges?name=...`  
+- `GET    /beeHelp/api/privileges`  
+- `PATCH  /beeHelp/api/privileges/{id}/signature-revoked?isSignatureRevoked=...`  
+- `DELETE /beeHelp/api/privileges/{id}`  
 
 ---
 
